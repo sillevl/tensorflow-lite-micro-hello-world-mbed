@@ -1,0 +1,32 @@
+name: Mbed Compile
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+    container:
+      image: ghcr.io/armmbed/mbed-os-env:master-latest
+    runs-on: ubuntu-latest
+    env:
+      TARGET: NUCLEO_L476RG
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: build-example
+      run: |
+          set -e
+          mbed deploy
+          mbed compile -t GCC_ARM -m ${{ env.TARGET }}
+          
+    - uses: actions/upload-artifact@v2
+      with:
+        name: binaries
+        path: BUILD/${{ env.TARGET }}/GCC_ARM/*{.bin,.hex}
+
+
+      
