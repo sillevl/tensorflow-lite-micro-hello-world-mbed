@@ -22,10 +22,11 @@ jobs:
           mbed deploy
           mbed compile -t GCC_ARM -m ${{ env.TARGET }}
           
-    - uses: actions/upload-artifact@v2
+    - uses: ncipollo/release-action@v1
       with:
-        name: binaries
-        path: BUILD/${{ env.TARGET }}/GCC_ARM/*.bin
+        artifacts: BUILD/${{ env.TARGET }}/GCC_ARM/*.bin
+        token: ${{ secrets.GITHUB_TOKEN }}
+        allowUpdates: true
 
 
       
